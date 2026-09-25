@@ -1,0 +1,32 @@
+(function(A){
+ const R=A.Core.Registry,G=A.Core.Graders,MR=A.Renderers.Math;
+ const S=(...x)=>x.map(text=>({text}));
+ const choose=(Random,items)=>Random.choice(items);
+ const placeholderProblem=(mode,difficulty,Random)=>{
+   if(mode==='add'){
+     const x=Random.int(2,difficulty==='easy'?20:40),k=Random.int(2,difficulty==='easy'?12:25),total=x+k;
+     return {prompt:`Find the missing number: □ + ${k} = ${total}`,answer:String(x),grader:G.numeric(x),animation:{type:'placeholder-visual',mode:'add',x,k,total},solution:[{html:MR.equationLines([`□ + ${k} = ${total}`,`□ = ${total} - ${k}`,`□ = ${x}`],'Undo the addition by subtracting')},{text:`Check: ${x} + ${k} = ${total}.`}]};
+   }
+   if(mode==='subtract'){
+     const whole=Random.int(12,difficulty==='easy'?40:80),x=Random.int(2,whole-2),remain=whole-x;
+     return {prompt:`Find the missing number: ${whole} − □ = ${remain}`,answer:String(x),grader:G.numeric(x),animation:{type:'placeholder-visual',mode:'subtract',x,whole,remain},solution:[{html:MR.equationLines([`${whole} - □ = ${remain}`,`□ = ${whole} - ${remain}`,`□ = ${x}`],'Find the missing part')},{text:`Check: ${whole} − ${x} = ${remain}.`}]};
+   }
+   if(mode==='multiply'){
+     const groups=Random.int(2,difficulty==='easy'?6:10),x=Random.int(2,difficulty==='easy'?9:12),total=groups*x;
+     return {prompt:`Find the missing number: ${groups} × □ = ${total}`,answer:String(x),grader:G.numeric(x),animation:{type:'placeholder-visual',mode:'multiply',x,groups,total},solution:[{html:MR.equationLines([`${groups} × □ = ${total}`,`□ = ${total} ÷ ${groups}`,`□ = ${x}`],'Divide the total into equal groups')},{text:`Check: ${groups} × ${x} = ${total}.`}]};
+   }
+   const divisor=Random.int(2,difficulty==='easy'?6:10),quotient=Random.int(2,difficulty==='easy'?9:12),x=divisor*quotient;
+   return {prompt:`Find the missing number: □ ÷ ${divisor} = ${quotient}`,answer:String(x),grader:G.numeric(x),animation:{type:'placeholder-visual',mode:'divide',x,divisor,quotient},solution:[{html:MR.equationLines([`□ ÷ ${divisor} = ${quotient}`,`□ = ${quotient} × ${divisor}`,`□ = ${x}`],'Undo division by multiplying')},{text:`Check: ${x} ÷ ${divisor} = ${quotient}.`}]};
+ };
+
+ R.register({id:'6.1.placeholder',chapter:6,section:'6.1',title:'Mixed placeholders',generate:({difficulty,Random})=>placeholderProblem(Random.choice(['add','subtract','multiply','divide']),difficulty,Random)});
+ R.register({id:'6.1.placeholder-add',chapter:6,section:'6.1',title:'Addition placeholder',generate:({difficulty,Random})=>placeholderProblem('add',difficulty,Random)});
+ R.register({id:'6.1.placeholder-subtract',chapter:6,section:'6.1',title:'Subtraction placeholder',generate:({difficulty,Random})=>placeholderProblem('subtract',difficulty,Random)});
+ R.register({id:'6.1.placeholder-multiply',chapter:6,section:'6.1',title:'Multiplication placeholder',generate:({difficulty,Random})=>placeholderProblem('multiply',difficulty,Random)});
+ R.register({id:'6.1.placeholder-divide',chapter:6,section:'6.1',title:'Division placeholder',generate:({difficulty,Random})=>placeholderProblem('divide',difficulty,Random)});
+ R.register({id:'6.2.word-to-equation',chapter:6,section:'6.2',title:'Word sentence → equation',generate:({difficulty,Random})=>{const n=Random.int(2,20),x=Random.int(2,20),sum=x+n,eq=`x+${n}=${sum}`;return {prompt:`Write an equation for: “A number plus ${n} equals ${sum}.” Use x for the number.`,answer:eq,grader:(input)=>String(input).replace(/\s/g,'').toLowerCase()===eq,solution:[{html:MR.equationLines([`a number → x`,`plus ${n} → x + ${n}`,`equals ${sum} → x + ${n} = ${sum}`],'Translate each phrase into math')} ]};}});
+ R.register({id:'6.3.solve-equation-add',chapter:6,section:'6.3',title:'Solve an addition/subtraction equation',generate:({difficulty,Random})=>{const x=Random.int(2,50),k=Random.int(2,25),plus=Random.bool(),rhs=plus?x+k:x+k;const prompt=plus?`Solve: x + ${k} = ${rhs}`:`Solve: ${rhs} − x = ${k}`;return {prompt,answer:String(x),grader:G.numeric(x),solution:plus?[{html:MR.equationLines([`x + ${k} = ${rhs}`,`x + ${k} - ${k} = ${rhs} - ${k}`,`x = ${x}`],'Subtract the same number from both sides')} ,{text:`Check: ${x} + ${k} = ${rhs}.`}]:[{html:MR.equationLines([`${rhs} - x = ${k}`,`${rhs} - ${k} = x`,`x = ${x}`],'Find the missing subtracted amount')} ,{text:`Check: ${rhs} - ${x} = ${k}.`}]};}});
+ R.register({id:'6.3.solve-equation-multiply',chapter:6,section:'6.3',title:'Solve a multiplication equation',generate:({difficulty,Random})=>{const x=Random.int(2,12),k=Random.int(2,12),rhs=x*k;return {prompt:`Solve: ${k} × x = ${rhs}`,answer:String(x),grader:G.numeric(x),solution:[{html:MR.equationLines([`${k} × x = ${rhs}`,`(${k} × x) ÷ ${k} = ${rhs} ÷ ${k}`,`x = ${x}`],'Divide both sides by the coefficient')} ,{text:`Check: ${k} × ${x} = ${rhs}.`}]};}});
+ R.register({id:'6.4.inequality',chapter:6,section:'6.4',title:'Solve an inequality comparison',generate:({difficulty,Random})=>{const a=Random.int(5,50),b=Random.int(5,50),sym=a===b?'=':a>b?'>':'<';return {promptHtml:`Choose &lt;, &gt;, or = to make the statement true: ${a} □ ${b}`,answer:sym,grader:G.symbol(sym),solution:[{html:MR.equationLines([`${a} ${sym} ${b}`,'Compare from the highest place value first.'])},{text:`Answer: ${sym}.`}]};}});
+ R.register({id:'6.5.word-equation',chapter:6,section:'6.5',title:'Solve a word problem with an equation',generate:({difficulty,Random})=>{const total=Random.int(20,80),known=Random.int(5,total-5),x=total-known;const scenarios=[{prompt:`Two students sold ${total} tickets altogether. One student sold ${known}. How many did the other student sell?`,noun:'tickets'},{prompt:`Two shelves hold ${total} books altogether. One shelf has ${known} books. How many books are on the other shelf?`,noun:'books'},{prompt:`A team collected ${total} cans. One group collected ${known}. How many cans did the other group collect?`,noun:'cans'},{prompt:`Two hikers walked ${total} km altogether. One hiker walked ${known} km. How many kilometres did the other hiker walk?`,noun:'kilometres'},{prompt:`A box contains ${total} markers in two compartments. One compartment has ${known}. How many markers are in the other compartment?`,noun:'markers'}];const sc=choose(Random,scenarios);return {prompt:sc.prompt,answer:String(x),grader:G.numeric(x),solution:[{text:`Let x represent the unknown number of ${sc.noun}.`},{html:MR.equationLines([`${known} + x = ${total}`,`x = ${total} - ${known}`,`x = ${x}`],'Write and solve the equation')},{text:`Answer: ${x} ${sc.noun}.`}]};}});
+})(MathApp);

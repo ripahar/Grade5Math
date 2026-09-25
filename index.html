@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grade 5 Math Practice Lab</title>
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/print.css" media="print" />
+  <script defer src="src/core/namespace.js"></script>
+  <script defer src="src/core/random.js"></script>
+  <script defer src="src/math/mathUtils.js"></script>
+  <script defer src="src/math/fraction.js"></script>
+  <script defer src="src/renderers/mathRenderer.js"></script>
+  <script defer src="src/renderers/animatedArithmeticRenderer.js"></script>
+  <script defer src="src/renderers/svgRenderer.js"></script>
+  <script defer src="src/core/graders.js"></script>
+  <script defer src="src/core/problemRegistry.js"></script>
+  <script defer src="src/data/chapters.js"></script>
+  <script defer src="src/problems/chapter01.js"></script>
+  <script defer src="src/problems/chapter02.js"></script>
+  <script defer src="src/problems/chapter03.js"></script>
+  <script defer src="src/problems/chapter04.js"></script>
+  <script defer src="src/problems/chapter05.js"></script>
+  <script defer src="src/problems/chapter06.js"></script>
+  <script defer src="src/problems/chapter07.js"></script>
+  <script defer src="src/problems/chapter08.js"></script>
+  <script defer src="src/problems/chapter09.js"></script>
+  <script defer src="src/problems/chapter10.js"></script>
+  <script defer src="src/problems/chapter11.js"></script>
+  <script defer src="src/services/storageService.js"></script>
+  <script defer src="src/services/worksheetService.js"></script>
+  <script defer src="src/ui/appUI.js"></script>
+  <script defer src="src/app.js"></script>
+</head>
+<body>
+  <header class="app-header no-print">
+    <div>
+      <h1>Grade 5 Math Practice Lab</h1>
+      <p>Interactive practice, generated worksheets, grading, and step-by-step solutions.</p>
+    </div>
+    <nav>
+      <button data-view="practice" class="nav-btn active">Practice</button>
+      <button data-view="worksheet" class="nav-btn">Worksheet Builder</button>
+      <button data-view="progress" class="nav-btn">Progress</button>
+    </nav>
+  </header>
+
+  <main id="app" aria-live="polite"></main>
+
+  <footer class="no-print">
+    <p>Runs locally in your browser. Progress is stored only on this device.</p>
+  </footer>
+</body>
+</html>

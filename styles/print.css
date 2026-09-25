@@ -1,0 +1,9 @@
+@page { size: Letter; margin: 0.55in; }
+html, body { background:#fff !important; color:#000 !important; }
+.no-print, .sidebar, .toolbar, .answer-row, .feedback, footer { display:none !important; }
+#app { max-width:none; padding:0; }
+.panel, .question-card { border:0; box-shadow:none; padding:0; }
+.worksheet { font-size:11pt; }
+.worksheet-item { margin-bottom:16pt; }
+.answer-key { page-break-before:always; }
+svg.math-diagram { border:1px solid #777; }
